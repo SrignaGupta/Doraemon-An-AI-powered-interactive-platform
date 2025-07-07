@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Doraemon Login</title>
+    <style>
+        body {
+            margin: 0;
+            background-color: white;
+            font-family: 'Segoe UI', sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        input[type="text"] {
+            padding: 20px;
+            width: 400px;
+            font-size: 20px;
+            border-radius: 12px;
+            border: 2px solid #007BFF;
+            outline: none;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        button {
+            padding: 18px 40px;
+            font-size: 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+    <script>
+        function greetUser() {
+            const name = document.getElementById("username").value.trim();
+            if (name === "") {
+                alert("Please enter your name!");
+            } else {
+                window.location.href = "welcome.html?name=" + encodeURIComponent(name);
+            }
+        }
+    </script>
+</head>
+<body>
+    <input type="text" id="username" placeholder="Enter your name">
+    <button onclick="greetUser()">Login</button>
+</body>
+</html>

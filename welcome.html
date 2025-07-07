@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Welcome</title>
+  <style>
+    body {
+      margin: 0;
+      background: url('doraas.jpg') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .message {
+      font-size: 32px;
+      color: #007BFF; /* Blue welcome text */
+      font-weight: 600;
+      margin-top: 40px;
+      text-align: center;
+    }
+
+    .press-btn {
+      position: absolute;
+      top: calc(72% + 0.3cm); /* Moved up 0.2cm from previous 0.5cm */
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background-color: #cc1e1e; /* Doraemon nose color */
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+      transition: 0.3s;
+    }
+
+    .press-btn:hover {
+      background-color: #a00000;
+      transform: translate(-50%, -50%) scale(1.05);
+    }
+
+    @media screen and (max-width: 600px) {
+      .message {
+        font-size: 24px;
+        padding: 0 20px;
+      }
+
+      .press-btn {
+        width: 80px;
+        height: 80px;
+        font-size: 16px;
+      }
+    }
+  </style>
+
+  <script>
+    window.onload = function () {
+      const params = new URLSearchParams(window.location.search);
+      const username = params.get("name") || "Friend";
+      document.getElementById("userGreeting").innerText =
+        "Welcome to the Doraemon's World, " + username + "!";
+    };
+
+    function exploreDoraemon() {
+      window.location.href = "explore.html";
+    }
+  </script>
+</head>
+<body>
+  <div class="message" id="userGreeting"></div>
+  <button class="press-btn" onclick="exploreDoraemon()">Press</button>
+</body>
+</html>

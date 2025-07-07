@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Doraemon Chatbot</title>
+<style>
+body { font-family: Arial, sans-serif; background-color: #f0f8ff; }
+h1 { text-align: center; color: #4a90e2; }
+#chat { max-width: 600px; margin: 20px auto; background: white; padding: 10px; border-radius: 8px; height: 400px; overflow-y: scroll; }
+.user { text-align: right; color: blue; margin: 5px; }
+.bot { text-align: left; color: green; margin: 5px; }
+#input { display: flex; max-width: 600px; margin: 10px auto; }
+#message { flex: 1; padding: 10px; }
+#send { background: #4a90e2; color: white; border: none; padding: 10px 20px; cursor: pointer; }
+</style>
+</head>
+<body>
+
+<h1>🤖 Chat with Doraemon</h1>
+<div id="chat"></div>
+<div id="input">
+  <input type="text" id="message" placeholder="Type your message">
+  <button id="send">Send</button>
+</div>
+
+<!-- Add your sound file -->
+<audio id="doraemonSound" src="doraemon-sms.mp3"></audio>
+
+<script src="app.js"></script>
+
+<script>
+// play sound on page load
+window.addEventListener("load", () => {
+  const audio = document.getElementById("doraemonSound");
+  audio.play();
+});
+</script>
+
+</body>
+</html>

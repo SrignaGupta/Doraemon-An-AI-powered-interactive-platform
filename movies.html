@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Doraemon Movies</title>
+<style>
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #f1f8e9;
+  color: #333;
+  text-align: center;
+}
+h1 {
+  color: #1b5e20;
+  margin: 20px;
+  font-size: 2em;
+}
+.movies-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+.movie-card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  overflow: hidden;
+  cursor: pointer;
+  text-align: left;
+  transition: box-shadow 0.3s ease;
+}
+.movie-card:hover {
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+.movie-header {
+  padding: 15px 20px;
+  font-size: 1.1em;
+  color: #388e3c;
+  font-weight: 600;
+  position: relative;
+}
+.movie-header::after {
+  content: '▼';
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.9em;
+  transition: transform 0.3s ease;
+}
+.movie-card.open .movie-header::after {
+  transform: translateY(-50%) rotate(180deg);
+}
+.movie-description {
+  max-height: 0;
+  overflow: hidden;
+  background: #f9fbe7;
+  padding: 0 20px;
+  font-size: 0.95em;
+  color: #555;
+  line-height: 1.4;
+  transition: max-height 0.4s ease, padding 0.3s ease;
+}
+.movie-card.open .movie-description {
+  max-height: 300px;
+  padding: 10px 20px 15px;
+}
+.back-btn {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 10px 20px;
+  background: #388e3c;
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+  transition: background 0.3s;
+}
+.back-btn:hover {
+  background: #1b5e20;
+}
+</style>
+</head>
+<body>
+
+<h1>🎬 Doraemon’s Famous Movies (Latest → Oldest) 🎬</h1>
+
+<div class="movies-list" id="moviesList"></div>
+
+<a href="explore.html" class="back-btn">⬅️ Back to Explore</a>
+
+<script>
+const movies = [
+  ["Doraemon: Nobita’s Sky Utopia (2023)", "Nobita and friends discover a utopian world in the sky and try to save it."],
+  ["Stand by Me Doraemon 2 (2020)", "The sequel to the emotional 3D movie."],
+  ["Doraemon: Nobita's Chronicle of the Moon Exploration (2019)", "Exploring a mysterious civilization on the moon."],
+  ["Doraemon: Nobita's Treasure Island (2018)", "A pirate-themed treasure hunt on an island."],
+  ["Doraemon: Great Adventure in the Antarctic Kachi Kochi (2017)", "An icy adventure at the South Pole."],
+  ["Doraemon: Nobita and the Birth of Japan 2016", "A remake of the prehistoric Japan adventure."],
+  ["Doraemon: Nobita’s Space Heroes (2015)", "Nobita and friends become space superheroes."],
+  ["Stand by Me Doraemon (2014)", "A 3D movie retelling Doraemon and Nobita’s story."],
+  ["Doraemon: Nobita's Secret Gadget Museum (2013)", "A mystery in a museum filled with Doraemon’s gadgets."],
+  ["Doraemon: Nobita and the Island of Miracles (2012)", "An adventure on a mysterious island filled with extinct creatures."],
+  ["Doraemon: Nobita and the New Steel Troops (2011)", "A remake of the robot army invasion story."],
+  ["Doraemon: Nobita's Great Battle of the Mermaid King (2010)", "An undersea battle with the mermaid king."],
+  ["Doraemon: Nobita's Spaceblazer (2009)", "Another journey to protect a planet in another universe."],
+  ["Doraemon: Nobita and the Green Giant Legend (2008)", "Nobita saves the Earth from environmental destruction."],
+  ["Doraemon: Nobita's New Great Adventure into the Underworld (2007)", "A remake of the magical underworld adventure."],
+  ["Doraemon: Nobita's Dinosaur 2006", "A remake of the original dinosaur adventure with better animation."],
+  ["Doraemon: Nobita in the Wan-Nyan Spacetime Odyssey (2004)", "A world of talking dogs and cats in another dimension."],
+  ["Doraemon: Nobita and the Windmasters (2003)", "An adventure in the land of wind people."],
+  ["Doraemon: Nobita and the Robot Kingdom (2002)", "Robots rebel in their kingdom, and Nobita helps restore peace."],
+  ["Doraemon: Nobita and the Winged Braves (2001)", "They help a tribe of bird people fight to protect their home."],
+  ["Doraemon: Nobita Drifts in the Universe (1999)", "A thrilling adventure across different planets and galaxies."],
+  ["Doraemon: Nobita's Adventure in Clockwork City (1997)", "A hidden world powered by gears and clocks comes alive."],
+  ["Doraemon: Nobita and the Spiral City (1997)", "The gang discovers a mysterious spiral-shaped city."],
+  ["Doraemon: Nobita and the Galaxy Super-express (1996)", "They go on a luxury train ride through the galaxy that turns dangerous."],
+  ["Doraemon: Nobita's Diary of the Creation of the World (1995)", "Nobita plays god and creates his own universe."],
+  ["Doraemon: Nobita's Three Visionary Swordsmen (1994)", "A dream world where Nobita becomes a heroic swordsman."],
+  ["Doraemon: Nobita and the Tin Labyrinth (1993)", "They enter a mysterious hotel which hides a secret mechanical world."],
+  ["Doraemon: Nobita and the Kingdom of Clouds (1992)", "The gang creates a utopia in the sky, but trouble follows."],
+  ["Doraemon: Nobita in Dorabian Nights (1991)", "They enter the world of Arabian Nights stories and have an adventure."],
+  ["Doraemon: Nobita and the Birth of Japan (1989)", "The gang goes back to prehistoric Japan to live with early humans."],
+  ["Doraemon: The Record of Nobita's Parallel Journey to the West (1988)", "A parody of the Journey to the West tale with Doraemon and friends."],
+  ["Doraemon: Nobita and the Knights on Dinosaurs (1987)", "The gang travels to the world of dinosaurs and knights."],
+  ["Doraemon: Nobita and the Steel Troops (1986)", "They battle an army of robots trying to invade Earth."],
+  ["Doraemon: Nobita's Little Star Wars (1985)", "Nobita helps a tiny alien fight a space war."],
+  ["Doraemon: Nobita's Great Adventure into the Underworld (1984)", "A magical world where Nobita battles witches and demons."],
+  ["Doraemon: Nobita and the Castle of the Undersea Devil (1983)", "An adventure under the sea to stop an evil force from conquering the ocean."],
+  ["Doraemon: Nobita and the Haunts of Evil (1982)", "Nobita and friends go on an African safari and discover a secret about animals."],
+  ["Doraemon: The Records of Nobita, Spaceblazer (1981)", "Nobita and friends travel to another universe to save a planet in peril."],
+  ["Doraemon: Nobita's Dinosaur (1980)", "The first Doraemon movie where Nobita finds and raises a baby dinosaur."]
+];
+
+const list = document.getElementById("moviesList");
+
+movies.forEach(([name, desc]) => {
+  const card = document.createElement("div");
+  card.className = "movie-card";
+  card.onclick = () => card.classList.toggle("open");
+  card.innerHTML = `
+    <div class="movie-header">${name}</div>
+    <div class="movie-description">${desc}</div>`;
+  list.appendChild(card);
+});
+</script>
+
+</body>
+</html>

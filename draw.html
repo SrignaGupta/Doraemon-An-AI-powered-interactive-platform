@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Draw with Doraemon</title>
+<style>
+body {
+  margin: 0;
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+  background: linear-gradient(to bottom right, #e1f5fe, #fff9c4);
+  text-align: center;
+  color: #333;
+}
+
+header {
+  background: #29b6f6;
+  color: white;
+  padding: 20px;
+  font-size: 2em;
+  text-shadow: 2px 2px #0288d1;
+  border-bottom: 4px solid #0288d1;
+}
+
+canvas {
+  border: 5px solid #fdd835;
+  border-radius: 10px;
+  background: white;
+  margin-top: 20px;
+  cursor: crosshair;
+}
+
+.controls {
+  margin: 15px;
+}
+
+button, select {
+  background: #0288d1;
+  color: white;
+  padding: 8px 15px;
+  font-size: 0.9em;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s;
+  margin: 3px;
+}
+
+button:hover, select:hover {
+  background: #01579b;
+}
+
+.color-palette {
+  display: inline-block;
+  margin: 10px;
+}
+.color {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  display: inline-block;
+  margin: 0 3px;
+  cursor: pointer;
+  border: 2px solid #ccc;
+}
+</style>
+</head>
+<body>
+
+<header>🎨 Draw with Doraemon 🎨</header>
+
+<div class="controls">
+  <div class="color-palette">
+    <div class="color" style="background:#000" onclick="setColor('#000')"></div>
+    <div class="color" style="background:#f44336" onclick="setColor('#f44336')"></div>
+    <div class="color" style="background:#4caf50" onclick="setColor('#4caf50')"></div>
+    <div class="color" style="background:#2196f3" onclick="setColor('#2196f3')"></div>
+    <div class="color" style="background:#ff9800" onclick="setColor('#ff9800')"></div>
+    <div class="color" style="background:#9c27b0" onclick="setColor('#9c27b0')"></div>
+  </div>
+  <select id="tool" onchange="changeTool()">
+    <option value="pencil">✏️ Pencil</option>
+    <option value="line">📏 Line</option>
+    <option value="rectangle">⬛ Rectangle</option>
+    <option value="circle">⚪ Circle</option>
+    <option value="eraser">🧽 Eraser</option>
+  </select>
+  <button onclick="clearCanvas()">🗑️ Clear</button>
+</div>
+
+<canvas id="drawingCanvas" width="800" height="500"></canvas>
+
+<footer>
+  <a href="explore.html" class="back-btn">⬅️ Back to Explore</a>
+</footer>
+
+<script>
+const canvas = document.getElementById("drawingCanvas");
+const ctx = canvas.getContext("2d");
+let drawing = false;
+let color = "#000";
+let startX, startY;
+let currentTool = "pencil";
+
+canvas.addEventListener("mousedown", (e) => {
+  drawing = true;
+  startX = e.offsetX;
+  startY = e.offsetY;
+  if (currentTool === "pencil" || currentTool === "eraser") {
+    draw(e);
+  }
+});
+
+canvas.addEventListener("mouseup", (e) => {
+  if (!drawing) return;
+  if (currentTool !== "pencil" && currentTool !== "eraser") {
+    drawShape(e);
+  }
+  drawing = false;
+});
+
+canvas.addEventListener("mousemove", (e) => {
+  if (!drawing) return;
+  if (currentTool === "pencil" || currentTool === "eraser") {
+    draw(e);
+  }
+});
+
+function setColor(newColor) {
+  color = newColor;
+  if (currentTool === "eraser") {
+    currentTool = "pencil";
+    document.getElementById("tool").value = "pencil";
+  }
+}
+
+function changeTool() {
+  currentTool = document.getElementById("tool").value;
+}
+
+function draw(e) {
+  ctx.fillStyle = (currentTool === "eraser") ? "#fff" : color;
+  ctx.beginPath();
+  ctx.arc(e.offsetX, e.offsetY, 2, 0, Math.PI * 2);
+  ctx.fill();
+}
+
+function drawShape(e) {
+  const endX = e.offsetX;
+  const endY = e.offsetY;
+
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+
+  if (currentTool === "line") {
+    ctx.moveTo(startX, startY);
+    ctx.lineTo(endX, endY);
+  } else if (currentTool === "rectangle") {
+    ctx.rect(startX, startY, endX - startX, endY - startY);
+  } else if (currentTool === "circle") {
+    const radius = Math.sqrt((endX - startX) ** 2 + (endY - startY) ** 2);
+    ctx.arc(startX, startY, radius, 0, Math.PI * 2);
+  }
+
+  ctx.stroke();
+}
+
+function clearCanvas() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+</script>
+
+</body>
+</html>

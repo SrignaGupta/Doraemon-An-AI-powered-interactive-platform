@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Doraemon Gadgets</title>
+<style>
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #f0f4f8;
+  color: #333;
+  text-align: center;
+}
+
+h1 {
+  color: #0d47a1;
+  margin: 20px;
+  font-size: 2em;
+}
+
+.gadgets-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.gadget-card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  overflow: hidden;
+  cursor: pointer;
+  text-align: left;
+  transition: box-shadow 0.3s ease;
+}
+
+.gadget-card:hover {
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.gadget-header {
+  padding: 15px 20px;
+  font-size: 1.1em;
+  color: #1976d2;
+  font-weight: 600;
+  position: relative;
+}
+
+.gadget-header::after {
+  content: '▼';
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.9em;
+  transition: transform 0.3s ease;
+}
+
+.gadget-card.open .gadget-header::after {
+  transform: translateY(-50%) rotate(180deg);
+}
+
+.gadget-description {
+  max-height: 0;
+  overflow: hidden;
+  background: #fafafa;
+  padding: 0 20px;
+  font-size: 0.95em;
+  color: #555;
+  line-height: 1.4;
+  transition: max-height 0.4s ease, padding 0.3s ease;
+}
+
+.gadget-card.open .gadget-description {
+  max-height: 300px;
+  padding: 10px 20px 15px;
+}
+
+.back-btn {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 10px 20px;
+  background: #1976d2;
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+  transition: background 0.3s;
+}
+
+.back-btn:hover {
+  background: #0d47a1;
+}
+</style>
+</head>
+<body>
+
+<h1>🔧 Doraemon’s Amazing Gadgets 🔧</h1>
+
+<div class="gadgets-list" id="gadgetsList"></div>
+
+<a href="explore.html" class="back-btn">⬅️ Back to Explore</a>
+
+<script>
+const gadgets = [
+  ["Anywhere Door", "A pink door that lets you instantly travel anywhere by thinking of the place."],
+  ["Time Machine", "A machine hidden in Nobita’s drawer that lets you travel to any point in time."],
+  ["Bamboo Copter", "A small propeller that allows you to fly when attached to your head."],
+  ["Memory Bread", "Press it on text and eat it to memorize everything written instantly."],
+  ["Translator Jelly", "Eat this jelly to understand and speak any language."],
+  ["Small Light", "Shrinks objects or people to a tiny size."],
+  ["Big Light", "Makes objects or people grow larger."],
+  ["Pass Loop", "Lets you walk through walls or closed doors."],
+  ["Dress-Up Camera", "Takes a picture and instantly dresses you in the clothes from the photo."],
+  ["Invisibility Cloak", "Makes the wearer completely invisible."],
+  ["Air Cannon", "Shoots a powerful blast of air at your target."],
+  ["Weather Box", "Controls the weather in a specific area."],
+  ["Super Gloves", "Gives the user incredible strength."],
+  ["Time Furoshiki", "Wraps items to make them older or newer."],
+  ["Dream Recorder", "Records your dreams to watch them later."],
+  ["Mood Badges", "Changes the user’s mood to match the badge."],
+  ["Hopters Shoes", "Lets you jump great distances effortlessly."],
+  ["Stone Cap", "Turns you into a statue so no one notices you."],
+  ["Gravity Paint", "Changes the gravity in a specific area."],
+  ["Escape Rope", "Teleports you out of dangerous situations."],
+  ["Copy Robot", "Creates an exact copy of yourself that obeys your commands."],
+  ["Spy Glasses", "Lets you see through walls."],
+  ["Lies Detector", "Shows if someone is lying."],
+  ["Truth Spray", "Forces people to tell the truth."],
+  ["Invisible Ink", "Lets you write secret messages only you can see."],
+  ["Wind Generator", "Summons strong winds to blow things away."],
+  ["Underwater Gum", "Allows you to breathe underwater."],
+  ["Anti-Gravity Boots", "Lets you walk on ceilings and walls."],
+  ["Microwave Telephone", "Sends and receives edible food over the phone."],
+  ["Anywhere Window", "Shows a live view of any place you imagine."],
+  ["Alarm Cat", "A mechanical cat that wakes you up on time."],
+  ["Pet Simulator", "Simulates having a real pet."],
+  ["Feelings Stamp", "Transfers your feelings to someone else."],
+  ["Time Cloth", "Freezes time when draped over objects."],
+  ["Wind-Up Key", "Gives life to inanimate objects."],
+  ["Light of Revival", "Restores broken items to their original state."],
+  ["Darkness Torch", "Casts an area into complete darkness."],
+  ["Sound Recorder", "Records and replays any sound perfectly."],
+  ["Good Luck Charm", "Increases your luck temporarily."],
+  ["Bad Luck Magnet", "Brings bad luck to whoever wears it."],
+  ["Wish Stone", "Grants one wish to the person who holds it."],
+  ["Emotional Mirror", "Shows your emotions as colors."],
+  ["Fix-It Spray", "Repairs anything it is sprayed on."],
+  ["Flight Hat", "Lets you fly around like a bird."],
+  ["Plant Seeds", "Grow any type of plant instantly."],
+  ["Magic Rope", "Can tie or untie anything by itself."],
+  ["Substitute Doll", "Takes your place in chores or school."],
+  ["Reverse Clock", "Rewinds time for a few minutes."],
+  ["Thunder Drum", "Summons a storm when beaten."],
+  ["Calm Bell", "Calms everyone who hears it."]
+];
+
+const list = document.getElementById("gadgetsList");
+
+gadgets.forEach(([name, desc]) => {
+  const card = document.createElement("div");
+  card.className = "gadget-card";
+  card.onclick = () => card.classList.toggle("open");
+  card.innerHTML = `
+    <div class="gadget-header">${name}</div>
+    <div class="gadget-description">${desc}</div>`;
+  list.appendChild(card);
+});
+</script>
+
+</body>
+</html>
