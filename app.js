@@ -22,23 +22,31 @@ function sendMessage() {
   addMessage(`You: ${userMessage}`, "user");
   messageInput.value = "";
 
-  fetch("/api/chat", {
+  // Show immediate thinking message
+  const thinkingDiv = document.createElement("div");
+  thinkingDiv.className = "bot";
+  thinkingDiv.textContent = "Doraemon is thinking 🤖...";
+  chat.appendChild(thinkingDiv);
+  chat.scrollTop = chat.scrollHeight;
+
+  fetch("http://localhost:3000/api/chat", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ message: userMessage }),
   })
     .then((res) => res.json())
     .then((data) => {
+      // Replace thinking message with actual reply
       if (data.reply) {
-        addMessage(`Doraemon: ${data.reply}`, "bot");
+        thinkingDiv.textContent = `Doraemon: ${data.reply}`;
       } else if (data.error) {
-        addMessage(`❌ ${data.error}`, "bot");
+        thinkingDiv.textContent = `❌ ${data.error}`;
       } else {
-        addMessage("❌ Unexpected response from Doraemon.", "bot");
+        thinkingDiv.textContent = "❌ Unexpected response from Doraemon.";
       }
     })
     .catch((err) => {
       console.error(err);
-      addMessage("❌ Error connecting to Doraemon.", "bot");
+      thinkingDiv.textContent = "❌ Error connecting to Doraemon.";
     });
 }
